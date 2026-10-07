@@ -1,7 +1,7 @@
 ---
-title: "linear model from Web"
-author: "Your Name"
-date: "Put semester and year"
+title: "linear model of 1980s cars, I think"
+author: "Jesse H"
+date: "Fall 2026"
 output:
    html_document:
          toc: true
@@ -16,11 +16,11 @@ knitr::opts_chunk$set(echo = TRUE)
 Read about the data from the website where it is staged.  
 
 Form three regression models; 
-  Model1 is SIMS~ARM, 
-  Model2 is SIMS~GRIP, and 
-  Model3 is SIMS~ARM+GRIP. 
+  Model1 is mpg~disp, 
+  Model2 is mpg~hp, and 
+  Model3 is mpg~disp+hp. 
   
-For each model find a 95% prediction interval of SIMS given a value of 94  for GRIP and 88 for ARM. 
+For each model find a 95% prediction interval of mpg given a value of 183 for disp  for GRIP and 250 for hp. 
 
 After all three models have been constructed, compare Model1 with Model3 using anova. Document the comparison the markdown document, 
 
@@ -34,46 +34,67 @@ require(tidyverse)
 require(tigerstats)
 require(rgl)
 require(knitr)
+library(MASS)
 
 ```
 
 ```{r}
-data <- read.csv(file="https://onlinestatbook.com/case_studies_rvls/physical_strength/data.txt",sep="",header=TRUE)  
+data(mtcars)
+myData=mtcars
 
 ```
 
-## Model 1 SIM~ARMS
+## Model 1 mpg ~ disp
 
 ### scatterplot
 
+
+```{r}
+plot(mpg~disp,data=mtcars, pch=18)
+```
+This scatterplot shows that displacement increases, mpg decreases.  
 ### Numerical results
 
 
-### Inferential  (Build model.1)
-
-#### Predict at target point
-
-
-#### scatterplot with model fit
-  
-
-## Model 2 SIM~GRIP
-
-### Now add in scatterplot
-
-
-### Numerical results 
-
-
+```{r}
+#mtcars$mpg
+#mtcars$disp
+cor(mtcars$mpg,mtcars$disp)
+```
 ### Inferential  (Build model.2)
-  
-
+```{r}
+model.1 <- lm(mpg~disp,data=mtcars)
+summary.lm(model.1)
+```
+p value is significantly smaller.
 #### predict model.2 at target point
+```{r}
+newdata=data.frame(disp=183,hp=250)
+predict(model.1,newdata)
+```
 
 #### now add the model fit to our plot for model.2
-  
+
+```{r}
+plot(mpg~hp,data=mtcars, pch=19)
+```
+This scatterplot shows that displacement increases, mpg decreases.
+### Numerical results
 
 
+```{r}
+#mtcars$mpg
+#mtcars$disp
+cor(mtcars$hp,mtcars$disp)
+```
+### Inferential  (Build model.2)
+```{r}
+model.2 <- lm(mpg~hp,data=mtcars)
+summary.lm(model.2)
+```
+```{r}
+predict(model.2,newdata)
+```
 ## Model 3 SIM~ARM+GRIP
 
 ### Numerical results (cor)
